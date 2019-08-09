@@ -1,0 +1,147 @@
+---
+title: "Statistical Inference - Course Project Part 2"
+author: "Eduardo Alves"
+date: "August 09, 2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This project analyze the ToothGrowth data in the R datasets package.
+Per the course project instructions, the following items should occur:
+
+* Load the ToothGrowth data and perform some basic exploratory data analyses
+
+* Provide a basic summary of the data.
+
+* Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+
+* State your conclusions and the assumptions needed for your conclusions.
+
+## Loading necessary R packages
+```{r}
+if(!require(ggplot2)){install.packages('ggplot2')}; library(ggplot2)
+if(!require(datasets)){install.packages('datasets')}; library(datasets)
+```
+
+## Load the ToothGrowth data and perform some basic exploratory data analyses
+
+The dataset ToothGrowth is about the length of odontoblasts (cells responsible for tooth growth) in 60 guinea pigs. Each animal received one of three dose levels of vitamin C (0.5, 1, and 2 mg/day) by one of two delivery methods, orange juice or ascorbic acid (a form of vitamin C and coded as VC).
+
+loading dataset...
+```{r}
+data(ToothGrowth)
+```
+We can see below that the dataset consists of 60 observations of 3 types of variables:
+  
+  1.	len	  ->	Tooth length
+  
+  2.	supp	->	Supplement type (VC or OJ).
+  
+  3.	dose	->	Dose in milligrams/day
+  
+```{r}
+str(ToothGrowth)
+```
+Below is an exploratory analysis crossing information on tooth size versus dosage applied by type of supplement.
+
+```{r}
+coplot(len ~ dose | supp, data = ToothGrowth, panel = panel.smooth,
+       xlab = "ToothGrowth data: length vs dose, given type of supplement")
+
+```
+
+## Provide a basic summary of the data.
+
+As requested, below we have a basic summary of ToothGrowth dataset.
+
+```{r}
+summary(ToothGrowth)
+```
+As we can see that in each supplement subgroup there are 30 guinea pigs, the mean length of the odontoblasts is 18.81 µm, also presenting an mean dose of 1,167 mg/day.
+
+## Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+
+### 1st Hypothesis 
+
+The both supplements, Vitamin C and Orange Juice, deliver the same tooth growth across the dataset.
+
+```{r}
+hypo1 <- t.test(len ~ supp, data = ToothGrowth)
+hypo1$conf.int
+hypo1$p.value
+```
+
+The confidence interval includes 0 and p-value is greater than 0.05 threshold.
+
+The null hypothesis cannot be rejected.
+
+### 2nd Hypothesis 
+
+For the dose of 0.5 mg/day, the 2 supplements deliver the same tooth growth:
+
+```{r}
+hypo2 <- t.test(len ~ supp, data = subset(ToothGrowth, dose == 0.5))
+hypo2$conf.int
+hypo2$p.value
+```
+The confidence interval doesn't include 0 and p-value is smaller than 0.05 threshold.
+
+The null hypothesis can be rejected.
+
+### 3nd Hypothesis 
+
+For the dose of 1 mg/day, the 2 supplements deliver the same tooth growth:
+
+```{r}
+hypo3 <- t.test(len ~ supp, data = subset(ToothGrowth, dose == 1))
+hypo3$conf.int
+hypo3$p.value
+```
+The confidence interval doesn't include 0 and p-value is smaller than 0.05 threshold.
+
+The null hypothesis can be rejected.
+
+### 4th Hypothesis 
+
+For the dose of 2 mg/day, the 2 supplements deliver the same tooth growth:
+
+```{r}
+hypo4 <- t.test(len ~ supp, data = subset(ToothGrowth, dose == 2))
+hypo4$conf.int
+hypo4$p.value
+```
+The confidence interval doesn't include 0 and p-value is greater than 0.05 threshold.
+
+The null hypothesis cannot be rejected.
+
+## Assumptions and Conclusions
+
+### Assumptions
+
+* Null hypotheses assumed equal length means. Whereas alternative hypotheses assumed not equal length means.
+
+* The experiment was carried out on 60 guinea pigs divided in 6 groups of 10’s.
+
+  + 0.5 mg of VC to 10 pigs and 0.5 mg of OJ to another group of 10 pigs
+  
+  + 1.0 mg of VC to 10 pigs and 1.0 mg of OJ to another group of 10 pigs
+  
+  + 2.0 mg of VC to 10 pigs and 2.0 mg of OJ to another group of 10 pigs
+  
+* Doses are given to pigs for equal periods of time enough to compare their odontoblasts lengths fairly.
+
+### Conclusions
+
+* Dosages 0.5 mg/day and 1.0 mg/day of OJ delivers more tooth growth than VC.
+
+* Dosage 2.0 mg/day of VC delivers more tooth growth than OJ.
+
+* We can conclude that the higher of VC dose, the greater the tooth growth.
+
