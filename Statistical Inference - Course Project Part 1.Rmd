@@ -1,0 +1,53 @@
+---
+title: "Statistical Inference - Course Project Part 1"
+author: "Eduardo Alves"
+date: "August 09, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This project investigate the exponential distribution in R and compare it with the Central Limit Theorem.
+
+## Simulations
+
+The below code setups the paramters as outline in the course project instructions. This includes the rate (lambda), number of exponentials and the number of simulations we wish to run.
+
+In this part we will investigate the distribution of averages of 40 exponentials over a thousand simulations.
+
+Finally, we plot a histogram of the simulated mean values ( Means ).
+
+```{r code = readLines("StatisticalInferenceCourseProject1-Simulations.R")}
+```
+
+## Sample Mean versus Theoretical Mean
+
+The mean of the exponential distribution is 1/lambda. In this case, lambda is 0.2. Therefore, the theoretical mean should result as 5.
+
+```{r code = readLines("StatisticalInferenceCourseProject1-MeanVsTheoretical.R")}
+```
+
+```{r} 
+# calculate the mean of main.means
+mean(main.means)
+```
+
+The function above shows us that our sample mean is 4.988491 which is pretty close to our theoretical mean of 5.
+
+## Sample Variance versus Theoretical Variance
+
+```{r code = readLines("StatisticalInferenceCourseProject1-VarianceVsTheoretical.R")}
+```
+
+The variance of sample means is 0.6123671 while the theoretical variance is 0.625. They are close to each other.
+
+## Distribution
+
+As shown in the graph below, the calculated distribution of means of random sampled exponantial distributions overlaps with the normal distribution, due to the Central Limit Theorem. The more samples we would get, the closer will the density distribution be to the normal distribution bell curve.
+
+```{r code = readLines("StatisticalInferenceCourseProject1-Distribution.R")}
+```
